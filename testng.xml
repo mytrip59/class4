@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="TestSuite" verbose="1" >
+    <test name="Test" >
+        <classes>
+            <class name="CreateProductTest"></class>
+        </classes>
+    </test>
+
+    <!--Prepare test for firefox and IE browsers-->
+
+</suite>
