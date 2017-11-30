@@ -5,8 +5,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
-
 public class ProductPage {
     private WebDriver webDriver;
 
@@ -31,6 +29,8 @@ public class ProductPage {
 
     private By productSaveButtonSelector = By.cssSelector("div[class='btn-group hide dropdown pull-right']");
 
+    private By webElementPopUpCloseSelector = By.cssSelector("div > div.growl-close");
+
     // selector in the bottom of the page for waiting of loading page
     private By buttonSaveNewCategorySelector = By.cssSelector("#add-categories > h2");
 
@@ -53,7 +53,7 @@ public class ProductPage {
         webDriverWait.until(ExpectedConditions.elementToBeClickable(addNewProductLinkSelector));
     }
 
-    public void clickAddProductName() {
+    public void clickAddNewProduct() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.elementToBeClickable(addNewProductLinkSelector));
         WebElement webElementaddCategoryLink = webDriver.findElement(addNewProductLinkSelector);
@@ -118,23 +118,11 @@ public class ProductPage {
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(buttonProductSelector));
     }
 
+    public void clickPopUpAfterSave() {
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(webElementPopUpCloseSelector));
+        WebElement webElementPopUpCloseLink = webDriver.findElement(webElementPopUpCloseSelector);
+        webElementPopUpCloseLink.click();
+    }
 
-
-
-
-/*    public boolean checkCreateNewCategoryAlert(String newCategoryName) {
-        try {
-            WebDriverWait webDriverWait = new WebDriverWait(webDriver, 3);
-            webDriverWait.until(ExpectedConditions.elementToBeClickable(alertSuccessfulNewCategorySelector));
-            System.out.println("**** Alert! New category was created successfully! ****");
-            return true;
-            // save number of categories with new name
-        } catch (Exception e) {
-            System.out.println("**** Successful alert, that new category was created, was not displayed! ****");
-            BaseScript.quiteDriver(webDriver);
-            System.exit(1);
-            return false;
-
-        }
-    }*/
 }

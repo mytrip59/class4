@@ -44,32 +44,32 @@ public class EventHandler implements WebDriverEventListener{
 
     @Override
     public void beforeFindBy(By by, WebElement webElement, WebDriver webDriver) {
-        System.out.println("Finding webelement "+ by.toString());
+        System.out.println("Finding webelement " + by);
     }
 
     @Override
     public void afterFindBy(By by, WebElement webElement, WebDriver webDriver) {
-        System.out.println("Webelement was found successfully!");
+        System.out.println("Webelement " + by +" was found successfully!");
     }
 
     @Override
     public void beforeClickOn(WebElement webElement, WebDriver webDriver) {
-        System.out.println("Click on webelement "+ webElement.getTagName() + " " + webElement.getAttribute("name"));
+        System.out.println("Click on webelement " + webElement.getText());
     }
 
     @Override
     public void afterClickOn(WebElement webElement, WebDriver webDriver) {
-        System.out.println("Webelement was clicked successfully!");
+//        System.out.println("Webelement " + webElement.getText() + " was clicked successfully!");
     }
 
     @Override
     public void beforeChangeValueOf(WebElement webElement, WebDriver webDriver, CharSequence[] charSequences) {
-        System.out.println("Fill input " + webElement.getAttribute("id") + " with value " + charSequences.toString());
+        System.out.println("Fill input with value " + webElement.getText());
     }
 
     @Override
     public void afterChangeValueOf(WebElement webElement, WebDriver webDriver, CharSequence[] charSequences) {
-        System.out.println("Value was changed successfully!");
+        System.out.println("Value " + webElement.getText() +  " was changed successfully!");
     }
 
     @Override
@@ -79,11 +79,11 @@ public class EventHandler implements WebDriverEventListener{
 
     @Override
     public void afterScript(String s, WebDriver webDriver) {
-
+        System.out.println("AfterScript " + s);
     }
 
     @Override
     public void onException(Throwable throwable, WebDriver webDriver) {
-
+        System.out.println("Exception occured at " + throwable.getMessage());
     }
 }
