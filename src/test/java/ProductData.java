@@ -1,4 +1,5 @@
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
@@ -36,7 +37,9 @@ public class ProductData {
         String resultString = null;
         int randomNumberInt = generateRandomAmountInt(1, 999);
         float randomNumberFloat = (float)randomNumberInt/10;
-        resultString = new DecimalFormat("#0.0").format(randomNumberFloat);
+        DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols();
+        unusualSymbols.setDecimalSeparator(',');
+        resultString = new DecimalFormat("#0.0", unusualSymbols).format(randomNumberFloat);
         return resultString;
     }
 

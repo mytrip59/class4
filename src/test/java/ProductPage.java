@@ -24,8 +24,8 @@ public class ProductPage {
     private By productAmountLinkSelector = By.cssSelector("#tab_step3 > a");
     private By productAmountInputSelector = By.cssSelector("#form_step3_qty_0");
 
-    private By productCostLinkSelector = By.cssSelector("#tab_step2 > a");
-    private By productCostInputSelector = By.cssSelector("#form_step2_price");
+    private By productPriceLinkSelector = By.cssSelector("#tab_step2 > a");
+    private By productPriceInputSelector = By.cssSelector("#form_step2_price");
 
     private By productSaveButtonSelector = By.cssSelector("div[class='btn-group hide dropdown pull-right'] button[type='submit']");
 
@@ -69,12 +69,12 @@ public class ProductPage {
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(productAmountInputSelector));
     }
 
-    public void clickAddCost() {
+    public void clickAddPrice() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(productCostLinkSelector));
-        WebElement webElementaddCategoryLink = webDriver.findElement(productCostLinkSelector);
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(productPriceLinkSelector));
+        WebElement webElementaddCategoryLink = webDriver.findElement(productPriceLinkSelector);
         webElementaddCategoryLink.click();
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(productCostInputSelector));
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(productPriceInputSelector));
     }
 
     public void fillProductName(String productName) {
@@ -92,14 +92,14 @@ public class ProductPage {
         webElementEmailInput.sendKeys(productAmount);
     }
 
-    public void clearProductCost() {
-        WebElement webElementEmailInput = webDriver.findElement(productCostInputSelector);
+    public void clearProductPrice() {
+        WebElement webElementEmailInput = webDriver.findElement(productPriceInputSelector);
         webElementEmailInput.clear();
     }
 
-    public void fillProductCost(String productCost) {
-        WebElement webElementEmailInput = webDriver.findElement(productCostInputSelector);
-        webElementEmailInput.sendKeys(productCost);
+    public void fillProductPrice(String productPrice) {
+        WebElement webElementEmailInput = webDriver.findElement(productPriceInputSelector);
+        webElementEmailInput.sendKeys(productPrice);
     }
 
 

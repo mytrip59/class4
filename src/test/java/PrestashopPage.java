@@ -15,8 +15,13 @@ public class PrestashopPage {
     private By anyProductPrice = By.cssSelector("div[class='product-description']>div[class='product-price-and-shipping']>span[class='price']");
 
 
+    private By priceNewPoductSelector = By.cssSelector("span[itemprop='price']");
+    private By amountNewPoductSelector = By.cssSelector("#product-details > div.product-quantities > span");
+
+
     // selector in the bottom of the page for waiting of loading page
     private By footerSelector = By.cssSelector("#footer");
+
 
 
     public PrestashopPage(WebDriver webDriver) {
@@ -36,15 +41,62 @@ public class PrestashopPage {
 
     }
 
-    public boolean foundNewProductOnFirstPage(String createdProductEtalon){
+    // if found successfully->return found web element
+    public WebElement foundNewProductOnFirstPage(String createdProductEtalon){
         List<WebElement> listAllProducts = webDriver.findElements(anyProductName);
         for (WebElement curentWebElement: listAllProducts) {
             String curentWebElementString = curentWebElement.getText();
             if (curentWebElementString.equals(createdProductEtalon)){
-                return true;
+                return curentWebElement;
             }
         }
         // if circle was finished without return -> webelement was not found
-        return false;
+        return null;
     }
+
+    public void clickNewPoduct(WebElement foundWebElement){
+        foundWebElement.click();
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(amountNewPoductSelector));
+    }
+
+    public String getPricePoduct(){
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(priceNewPoductSelector));
+        WebElement priceNewPoductWebElement = webDriver.findElement(priceNewPoductSelector);
+        String priceNewPoductString =  priceNewPoductWebElement.getText();
+        return priceNewPoductString;
+    }
+
+    public String parsStringDigitDotComma (String inString){
+        StringBuilder sb = new StringBuilder();
+        char[] chars = inString.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (Character.isDigit (chars[i]) | (chars[i]) == ',' | (chars[i]) == '.'){
+                sb.append(chars[i]);
+            }
+        }
+        return sb.toString();
+    }
+
+    public String parsStringDigit (String inString){
+        StringBuilder sb = new StringBuilder();
+        char[] chars = inString.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (Character.isDigit (chars[i])){
+                sb.append(chars[i]);
+            }
+        }
+        return sb.toString();
+    }
+
+    public String getAmountPoduct(){
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(amountNewPoductSelector));
+        WebElement priceNewPoductWebElement = webDriver.findElement(amountNewPoductSelector);
+        String amountNewPoductString =  priceNewPoductWebElement.getText();
+        return amountNewPoductString;
+    }
+
+
 }

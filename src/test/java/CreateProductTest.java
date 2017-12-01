@@ -1,3 +1,4 @@
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -5,21 +6,30 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class CreateProductTest {
-    private String newProduct;
     EventFiringWebDriver webDriver;
     PrestashopPage prestashopPage;
+    final boolean DEBUGMODEENABLE = true;
 
-    @BeforeClass
+    private String newProductNameEtalon;
+    private String newProductAmountEtalon;
+    private String newProductPriceEtalon;
+    private WebElement foundNewProductOnFirstPageWebElement = null;
+
+
+    @BeforeClass (enabled = true)
     public void beforeClass (){
             webDriver = BaseScript.getConfiguredDriver();
+    }
 
-            LoginPage loginPage = new LoginPage(webDriver);
-            loginPage.open();
+    @Test (priority = 5, enabled = DEBUGMODEENABLE)
+    public void loginPage (){
+        LoginPage loginPage = new LoginPage(webDriver);
+        loginPage.open();
 
-            loginPage.fillEmailInput();
-            loginPage.fillPasswordInput();
-            loginPage.clickSubmitButton();
-            loginPage.waitLoadingLoginPage();
+        loginPage.fillEmailInput();
+        loginPage.fillPasswordInput();
+        loginPage.clickSubmitButton();
+        loginPage.waitLoadingLoginPage();
     }
 
     @AfterClass
@@ -27,20 +37,22 @@ public class CreateProductTest {
         BaseScript.quiteDriver(webDriver);
     }
 
-    @Test (priority = 10)
+    @Test (priority = 10, enabled = DEBUGMODEENABLE)
     public void createNewProduct() {
 
         ProductPage productPage = new ProductPage(webDriver);
         productPage.clickProductMenu();
         productPage.clickAddNewProduct();
-        newProduct = new ProductData().generateRandomName(6);
-        productPage.fillProductName(newProduct);
+        newProductNameEtalon = new ProductData().generateRandomName(6);
+        productPage.fillProductName(newProductNameEtalon);
         productPage.clickAddAmount();
         productPage.clearProductAmount();
-        productPage.fillProductAmount(new ProductData().generateRandomAmountString(1,100));
-        productPage.clickAddCost();
-        productPage.clearProductCost();
-        productPage.fillProductCost(new ProductData().generateRandomCost());
+        newProductAmountEtalon = new ProductData().generateRandomAmountString(1,100);
+        productPage.fillProductAmount(newProductAmountEtalon);
+        productPage.clickAddPrice();
+        productPage.clearProductPrice();
+        newProductPriceEtalon = new ProductData().generateRandomCost();
+        productPage.fillProductPrice(newProductPriceEtalon);
         productPage.saveNewProduct();
         productPage.clickPopUpAfterSave();
 
@@ -55,11 +67,28 @@ public class CreateProductTest {
 
     @Test (priority = 30, dependsOnMethods = "createOpenPrestashopClickAllProduct")
     public void assertNewProductOnFirstPage () {
-        boolean foundNewProductOnFirstPageBoolean = prestashopPage.foundNewProductOnFirstPage(newProduct);
+        foundNewProductOnFirstPageWebElement = prestashopPage.foundNewProductOnFirstPage(newProductNameEtalon);
 
-        if (foundNewProductOnFirstPageBoolean == true) {
-            Assert.assertTrue(true, "Web element " + newProduct + " is displayed in Catalog.");
-        } else Assert.assertTrue(false, "Web element " + newProduct + " is not displayed in Catalog.");
+        if (foundNewProductOnFirstPageWebElement != null) {
+            Assert.assertTrue(true, "Web element " + newProductNameEtalon + " is displayed in Catalog.");
+        } else Assert.assertTrue(false, "Web element " + newProductNameEtalon + " is not displayed in Catalog.");
     }
 
+    @Test (priority = 40)
+    public void clickFoundProductPrestashop() {
+        prestashopPage.clickNewPoduct(foundNewProductOnFirstPageWebElement);
+    }
+
+    @Test (priority = 50)
+    public void assertAmountProductPrestashop() {
+        String amountString = prestashopPage.getAmountPoduct();
+        Assert.assertEquals(amountString, newProductAmountEtalon, "Amount of product is equal!");
+    }
+
+    @Test (priority = 60)
+    public void assertPriceProductPrestashop() {
+        String priceString = prestashopPage.getPricePoduct();
+        Assert.assertEquals(priceString, newProductPriceEtalon, "Price of product is equal!");
+
+    }
 }
