@@ -16,12 +16,17 @@ public class CreateProductTest {
     private WebElement foundNewProductOnFirstPageWebElement = null;
 
 
-    @BeforeClass (enabled = true)
+    @BeforeClass
     public void beforeClass (){
             webDriver = BaseScript.getConfiguredDriver();
     }
 
-    @Test (priority = 5, enabled = DEBUGMODEENABLE)
+    @AfterClass
+    public void afterClass (){
+        BaseScript.quiteDriver(webDriver);
+    }
+
+    @Test (priority = 5)
     public void loginPage (){
         LoginPage loginPage = new LoginPage(webDriver);
         loginPage.open();
@@ -32,12 +37,7 @@ public class CreateProductTest {
         loginPage.waitLoadingLoginPage();
     }
 
-    @AfterClass
-    public void afterClass (){
-        BaseScript.quiteDriver(webDriver);
-    }
-
-    @Test (priority = 10, enabled = DEBUGMODEENABLE)
+    @Test (priority = 10)
     public void createNewProduct() {
 
         ProductPage productPage = new ProductPage(webDriver);
@@ -45,16 +45,17 @@ public class CreateProductTest {
         productPage.clickAddNewProduct();
         newProductNameEtalon = new ProductData().generateRandomName(6);
         productPage.fillProductName(newProductNameEtalon);
-        productPage.clickAddAmount();
+        // productPage.clickAddAmount();
         productPage.clearProductAmount();
         newProductAmountEtalon = new ProductData().generateRandomAmountString(1,100);
         productPage.fillProductAmount(newProductAmountEtalon);
-        productPage.clickAddPrice();
+        // productPage.clickAddPrice();
         productPage.clearProductPrice();
         newProductPriceEtalon = new ProductData().generateRandomCost();
         productPage.fillProductPrice(newProductPriceEtalon);
         productPage.saveNewProduct();
         productPage.clickPopUpAfterSave();
+        productPage.clickActiveProduct();
 
     }
 

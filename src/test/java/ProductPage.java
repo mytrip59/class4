@@ -21,15 +21,20 @@ public class ProductPage {
     // new product subpage, wait anable to write
     private By productNameInputSelector = By.cssSelector("#form_step1_name_1");
 
-    private By productAmountLinkSelector = By.cssSelector("#tab_step3 > a");
-    private By productAmountInputSelector = By.cssSelector("#form_step3_qty_0");
+    // private By productAmountLinkSelector = By.cssSelector("#tab_step3 > a");
+    // private By productAmountInputSelector = By.cssSelector("#form_step3_qty_0");
+    private By productAmountInputSelector = By.cssSelector("#form_step1_qty_0_shortcut");
 
-    private By productPriceLinkSelector = By.cssSelector("#tab_step2 > a");
-    private By productPriceInputSelector = By.cssSelector("#form_step2_price");
+/*    private By productPriceLinkSelector = By.cssSelector("#tab_step2 > a");
+    private By productPriceInputSelector = By.cssSelector("#form_step2_price");*/
+    private By productPriceInputSelector = By.cssSelector("#form_step1_price_shortcut");
+
 
     private By productSaveButtonSelector = By.cssSelector("div[class='btn-group hide dropdown pull-right'] button[type='submit']");
 
     private By webElementPopUpCloseSelector = By.cssSelector("div > div.growl-close");
+
+    private By activeProductSelector = By.cssSelector("div[class*='switch-input']");
 
     // selector in the bottom of the page for waiting of loading page
     private By buttonSaveNewCategorySelector = By.cssSelector("#add-categories > h2");
@@ -61,21 +66,21 @@ public class ProductPage {
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(productNameInputSelector));
     }
 
-    public void clickAddAmount() {
+/*    public void clickAddAmount() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.elementToBeClickable(productAmountLinkSelector));
         WebElement webElementaddCategoryLink = webDriver.findElement(productAmountLinkSelector);
         webElementaddCategoryLink.click();
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(productAmountInputSelector));
-    }
+    }*/
 
-    public void clickAddPrice() {
+/*    public void clickAddPrice() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.elementToBeClickable(productPriceLinkSelector));
         WebElement webElementaddCategoryLink = webDriver.findElement(productPriceLinkSelector);
         webElementaddCategoryLink.click();
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(productPriceInputSelector));
-    }
+    }*/
 
     public void fillProductName(String productName) {
         WebElement webElementEmailInput = webDriver.findElement(productNameInputSelector);
@@ -124,6 +129,13 @@ public class ProductPage {
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(webElementPopUpCloseSelector));
         WebElement webElementPopUpCloseLink = webDriver.findElement(webElementPopUpCloseSelector);
         webElementPopUpCloseLink.click();
+    }
+
+    public void clickActiveProduct() {
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(activeProductSelector));
+        WebElement webElementaddCategoryLink = webDriver.findElement(activeProductSelector);
+        webElementaddCategoryLink.click();
     }
 
 }
