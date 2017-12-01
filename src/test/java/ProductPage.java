@@ -27,7 +27,7 @@ public class ProductPage {
     private By productCostLinkSelector = By.cssSelector("#tab_step2 > a");
     private By productCostInputSelector = By.cssSelector("#form_step2_price");
 
-    private By productSaveButtonSelector = By.cssSelector("div[class='btn-group hide dropdown pull-right']");
+    private By productSaveButtonSelector = By.cssSelector("div[class='btn-group hide dropdown pull-right'] button[type='submit']");
 
     private By webElementPopUpCloseSelector = By.cssSelector("div > div.growl-close");
 
@@ -106,10 +106,11 @@ public class ProductPage {
     // Handle Pop up window
     public void saveNewProduct() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(productSaveButtonSelector));
-        WebElement webElementSaveNewCategoryLink = webDriver.findElement(productSaveButtonSelector);
+        By temp = By.cssSelector("#submit");
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(temp));
+        WebElement webElementSaveNewCategoryLink = webDriver.findElement(temp);
         webElementSaveNewCategoryLink.click();
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(productSaveButtonSelector));
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(temp));
     }
 
     // not use

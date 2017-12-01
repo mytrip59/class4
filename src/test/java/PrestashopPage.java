@@ -3,8 +3,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import java.util.List;
 
@@ -38,18 +36,15 @@ public class PrestashopPage {
 
     }
 
-    @Test
-    public void assertNewProductOnFirstPage (String createdProductEtalon){
+    public boolean foundNewProductOnFirstPage(String createdProductEtalon){
         List<WebElement> listAllProducts = webDriver.findElements(anyProductName);
         for (WebElement curentWebElement: listAllProducts) {
             String curentWebElementString = curentWebElement.getText();
             if (curentWebElementString.equals(createdProductEtalon)){
-                Assert.assertTrue(true, "Web element " + createdProductEtalon + " is displayed in Catalog.");
-                return;
+                return true;
             }
         }
         // if circle was finished without return -> webelement was not found
-        Assert.assertTrue(false, "Web element " + createdProductEtalon + " is not displayed in Catalog.");
-
+        return false;
     }
 }

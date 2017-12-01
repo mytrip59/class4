@@ -54,12 +54,12 @@ public class EventHandler implements WebDriverEventListener{
 
     @Override
     public void beforeClickOn(WebElement webElement, WebDriver webDriver) {
-        System.out.println("Click on webelement " + webElement.getText());
+        System.out.println("Before clicking on webelement");
     }
 
     @Override
     public void afterClickOn(WebElement webElement, WebDriver webDriver) {
-//        System.out.println("Webelement " + webElement.getText() + " was clicked successfully!");
+        System.out.println("After clicking on webelement");
     }
 
     @Override

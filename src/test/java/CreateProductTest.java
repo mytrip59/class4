@@ -1,23 +1,25 @@
 import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class CreateProductTest {
-    private String newProduct = "Blouse2"; // Correct!!!!!!!!!!!!
+    private String newProduct;
     EventFiringWebDriver webDriver;
+    PrestashopPage prestashopPage;
 
     @BeforeClass
     public void beforeClass (){
             webDriver = BaseScript.getConfiguredDriver();
 
-/*            LoginPage loginPage = new LoginPage(webDriver);
+            LoginPage loginPage = new LoginPage(webDriver);
             loginPage.open();
 
             loginPage.fillEmailInput();
             loginPage.fillPasswordInput();
             loginPage.clickSubmitButton();
-            loginPage.waitLoadingLoginPage();*/
+            loginPage.waitLoadingLoginPage();
     }
 
     @AfterClass
@@ -25,10 +27,10 @@ public class CreateProductTest {
         BaseScript.quiteDriver(webDriver);
     }
 
-    @Test
+    @Test (priority = 10)
     public void createNewProduct() {
 
-/*        ProductPage productPage = new ProductPage(webDriver);
+        ProductPage productPage = new ProductPage(webDriver);
         productPage.clickProductMenu();
         productPage.clickAddNewProduct();
         newProduct = new ProductData().generateRandomName(6);
@@ -40,13 +42,24 @@ public class CreateProductTest {
         productPage.clearProductCost();
         productPage.fillProductCost(new ProductData().generateRandomCost());
         productPage.saveNewProduct();
-        productPage.clickPopUpAfterSave();*/
-
-
-        PrestashopPage prestashopPage = new PrestashopPage(webDriver);
-        prestashopPage.open();
-        prestashopPage.clickAllProductsLink();
-        prestashopPage.assertNewProductOnFirstPage(newProduct);
+        productPage.clickPopUpAfterSave();
 
     }
+
+    @Test (priority = 20)
+    public void createOpenPrestashopClickAllProduct() {
+        prestashopPage = new PrestashopPage(webDriver);
+        prestashopPage.open();
+        prestashopPage.clickAllProductsLink();
+    }
+
+    @Test (priority = 30, dependsOnMethods = "createOpenPrestashopClickAllProduct")
+    public void assertNewProductOnFirstPage () {
+        boolean foundNewProductOnFirstPageBoolean = prestashopPage.foundNewProductOnFirstPage(newProduct);
+
+        if (foundNewProductOnFirstPageBoolean == true) {
+            Assert.assertTrue(true, "Web element " + newProduct + " is displayed in Catalog.");
+        } else Assert.assertTrue(false, "Web element " + newProduct + " is not displayed in Catalog.");
+    }
+
 }
