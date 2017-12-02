@@ -35,6 +35,7 @@ public class CreateProductTest {
         loginPage.fillPasswordInput();
         loginPage.clickSubmitButton();
         loginPage.waitLoadingLoginPage();
+        //aadfa
     }
 
     @Test (priority = 10)
