@@ -11,8 +11,8 @@ public class PrestashopPage {
 
     private By allProductsLinkSelector = By.cssSelector("a[class='all-product-link pull-xs-left pull-md-right h4']");
 
-    private By anyProductName = By.cssSelector("div[class='product-description']>h1[itemprop='name']>a");
-    private By anyProductPrice = By.cssSelector("div[class='product-description']>div[class='product-price-and-shipping']>span[class='price']");
+    private By anyProductNameSelector = By.cssSelector("div[class='product-description']>h1[itemprop='name']>a");
+    private By anyProductPriceSelector = By.cssSelector("div[class='product-description']>div[class='product-price-and-shipping']>span[class='price']");
 
 
     private By priceNewPoductSelector = By.cssSelector("span[itemprop='price']");
@@ -42,21 +42,31 @@ public class PrestashopPage {
     }
 
     // if found successfully->return found web element
-    public WebElement foundNewProductOnFirstPage(String createdProductEtalon){
-        List<WebElement> listAllProducts = webDriver.findElements(anyProductName);
-        for (WebElement curentWebElement: listAllProducts) {
-            String curentWebElementString = curentWebElement.getText();
-            if (curentWebElementString.equals(createdProductEtalon)){
-                return curentWebElement;
+    public WebElement foundNewProductInCatalog(String createdProductEtalon){
+
+        while (true) {
+            List<WebElement> listAllProducts = webDriver.findElements(anyProductNameSelector);
+            for (WebElement curentWebElement : listAllProducts) {
+                String curentWebElementString = curentWebElement.getText();
+                if (curentWebElementString.equalsIgnoreCase(createdProductEtalon)) {
+                    return curentWebElement;
+                }
+            }
+            // if new product was not found on first page, click next catalog page and search again,
+            // till method clicNextProductListLink() return exception on next link.
+            try {
+                clicNextProductListLink();
+                System.out.println("clicNextProductListLink()");
+            } catch (org.openqa.selenium.NoSuchElementException e){
+                System.out.println("clicNextProductListLink() is not click;");
+                return null;
             }
         }
-        // if circle was finished without return -> webelement was not found
-        return null;
     }
 
     public void clickNewPoduct(WebElement foundWebElement){
-        foundWebElement.click();
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+        foundWebElement.click();
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(amountNewPoductSelector));
     }
 
@@ -71,8 +81,8 @@ public class PrestashopPage {
     public String parsStringDigitDotComma (String inString){
         StringBuilder sb = new StringBuilder();
         char[] chars = inString.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            if (Character.isDigit (chars[i]) | (chars[i]) == ',' | (chars[i]) == '.'){
+        for (int j=0, i = 0; i < chars.length; i++) {
+            if ((Character.isDigit (chars[i]) | (chars[i]) == ',') ){
                 sb.append(chars[i]);
             }
         }
@@ -90,6 +100,20 @@ public class PrestashopPage {
         return sb.toString();
     }
 
+    // Use only for float and desimal format. After ',' add one symbot and return
+    public String parsStringOneSymbolAfterComma (String inString){
+        StringBuilder sb = new StringBuilder();
+        char[] chars = inString.toCharArray();
+        for (int j=0, i = 0; i < chars.length; i++) {
+            sb.append(chars[i]);
+            if (chars[i] == ','){
+                sb.append(chars[i+1]);
+                break;
+            }
+        }
+        return sb.toString();
+    }
+
     public String getAmountPoduct(){
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(amountNewPoductSelector));
@@ -98,5 +122,15 @@ public class PrestashopPage {
         return amountNewPoductString;
     }
 
+    public void clicNextProductListLink(){
+        By nextProductListSelector = By.cssSelector("a[rel='next']");
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 30);
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(nextProductListSelector));
+                WebElement nextProductListWebElement = webDriver.findElement(nextProductListSelector);
+        nextProductListWebElement.click();
+        // check
+        //webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(footerSelector));
+
+    }
 
 }

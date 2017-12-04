@@ -1,19 +1,13 @@
+import org.testng.annotations.DataProvider;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Arrays;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
 public class ProductData {
-/*    public static void main(String[] str){
-        ProductData utilities = new ProductData();
-       for (int i=0; i < 20; i++){
-           String result = utilities.generateRandomName(6);
-*//*           System.out.println(result);
-           System.out.println(utilities.generateRandomAmountInt(1,100));
-           System.out.println(utilities.generateRandomCost());*//*
-       }
-    }*/
 
     public int generateRandomAmountInt(int minLevel, int maxLevel){
         int result = 0;
@@ -27,6 +21,7 @@ public class ProductData {
         return result;
     }
 
+    // min and max level contain in result
     public String generateRandomAmountString(int minLevel, int maxLevel){
         int randomInt = generateRandomAmountInt(minLevel, maxLevel);
         String randomString = Integer.toString(randomInt);
@@ -35,7 +30,7 @@ public class ProductData {
 
     public String generateRandomCost (){
         String resultString = null;
-        int randomNumberInt = generateRandomAmountInt(1, 999);
+        int randomNumberInt = generateRandomAmountInt(1, 1000);
         float randomNumberFloat = (float)randomNumberInt/10;
         DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols();
         unusualSymbols.setDecimalSeparator(',');
