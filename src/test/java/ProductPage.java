@@ -138,12 +138,12 @@ public class ProductPage {
     public void saveNewProduct() {
         WebElement saveNewProductWebElement;
         try {
-            WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+            WebDriverWait webDriverWait = new WebDriverWait(webDriver, 5);
             webDriverWait.until(ExpectedConditions.elementToBeClickable(saveNewProductSelector1));
             saveNewProductWebElement = webDriver.findElement(saveNewProductSelector1);
             System.out.println("Find saveNewProductSelector1!");
             } catch (org.openqa.selenium.TimeoutException e){
-            WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+            WebDriverWait webDriverWait = new WebDriverWait(webDriver, 5);
             webDriverWait.until(ExpectedConditions.elementToBeClickable(saveNewProductSelector2));
             saveNewProductWebElement = webDriver.findElement(saveNewProductSelector2);
             System.out.println("Find saveNewProductSelector2!");

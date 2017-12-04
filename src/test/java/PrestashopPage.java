@@ -20,19 +20,18 @@ public class PrestashopPage {
 
 
     // selector in the bottom of the page for waiting of loading page
-    private By footerSelector = By.cssSelector("#footer");
-
+    private By footerSelector = By.cssSelector("footer#footer");
 
 
     public PrestashopPage(WebDriver webDriver) {
         this.webDriver = webDriver;
     }
 
-    public void open (){
+    public void open() {
         webDriver.get(Properties.getBaseUrl());
     }
 
-    public void clickAllProductsLink(){
+    public void clickAllProductsLink() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.elementToBeClickable(allProductsLinkSelector));
         WebElement allProductsLinkWebElement = webDriver.findElement(allProductsLinkSelector);
@@ -42,10 +41,13 @@ public class PrestashopPage {
     }
 
     // if found successfully->return found web element
-    public WebElement foundNewProductInCatalog(String createdProductEtalon){
-
+    public WebElement foundNewProductInCatalog(String createdProductEtalon) {
         while (true) {
-            List<WebElement> listAllProducts = webDriver.findElements(anyProductNameSelector);
+            threadSleep(5000);
+            List<WebElement> listAllProducts;
+            WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+            webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(footerSelector));
+            listAllProducts = webDriver.findElements(anyProductNameSelector);
             for (WebElement curentWebElement : listAllProducts) {
                 String curentWebElementString = curentWebElement.getText();
                 if (curentWebElementString.equalsIgnoreCase(createdProductEtalon)) {
@@ -56,44 +58,47 @@ public class PrestashopPage {
             // till method clicNextProductListLink() return exception on next link.
             try {
                 clicNextProductListLink();
-                System.out.println("clicNextProductListLink()");
-            } catch (org.openqa.selenium.NoSuchElementException e){
-                System.out.println("clicNextProductListLink() is not click;");
+                listAllProducts = null;
+                webDriverWait = null;
+                //System.out.println("clicNextProductListLink()");
+            } catch (org.openqa.selenium.NoSuchElementException e) {
+                //System.out.println("clicNextProductListLink() is not click;");
                 return null;
             }
         }
     }
 
-    public void clickNewPoduct(WebElement foundWebElement){
+    public void openCreatedPoductPage(WebElement foundWebElement) {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(footerSelector));
         foundWebElement.click();
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(amountNewPoductSelector));
     }
 
-    public String getPricePoduct(){
+    public String getPricePoduct() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(priceNewPoductSelector));
         WebElement priceNewPoductWebElement = webDriver.findElement(priceNewPoductSelector);
-        String priceNewPoductString =  priceNewPoductWebElement.getText();
+        String priceNewPoductString = priceNewPoductWebElement.getText();
         return priceNewPoductString;
     }
 
-    public String parsStringDigitDotComma (String inString){
+    public String parsStringDigitDotComma(String inString) {
         StringBuilder sb = new StringBuilder();
         char[] chars = inString.toCharArray();
-        for (int j=0, i = 0; i < chars.length; i++) {
-            if ((Character.isDigit (chars[i]) | (chars[i]) == ',') ){
+        for (int j = 0, i = 0; i < chars.length; i++) {
+            if ((Character.isDigit(chars[i]) | (chars[i]) == ',')) {
                 sb.append(chars[i]);
             }
         }
         return sb.toString();
     }
 
-    public String parsStringDigit (String inString){
+    public String parsStringDigit(String inString) {
         StringBuilder sb = new StringBuilder();
         char[] chars = inString.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            if (Character.isDigit (chars[i])){
+            if (Character.isDigit(chars[i])) {
                 sb.append(chars[i]);
             }
         }
@@ -101,36 +106,61 @@ public class PrestashopPage {
     }
 
     // Use only for float and desimal format. After ',' add one symbot and return
-    public String parsStringOneSymbolAfterComma (String inString){
+    public String parsStringOneSymbolAfterComma(String inString) {
         StringBuilder sb = new StringBuilder();
         char[] chars = inString.toCharArray();
-        for (int j=0, i = 0; i < chars.length; i++) {
+        for (int j = 0, i = 0; i < chars.length; i++) {
             sb.append(chars[i]);
-            if (chars[i] == ','){
-                sb.append(chars[i+1]);
+            if (chars[i] == ',') {
+                sb.append(chars[i + 1]);
                 break;
             }
         }
         return sb.toString();
     }
 
-    public String getAmountPoduct(){
+    public String getAmountPoduct() {
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(amountNewPoductSelector));
         WebElement priceNewPoductWebElement = webDriver.findElement(amountNewPoductSelector);
-        String amountNewPoductString =  priceNewPoductWebElement.getText();
+        String amountNewPoductString = priceNewPoductWebElement.getText();
         return amountNewPoductString;
     }
 
-    public void clicNextProductListLink(){
-        By nextProductListSelector = By.cssSelector("a[rel='next']");
-        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 30);
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(nextProductListSelector));
-                WebElement nextProductListWebElement = webDriver.findElement(nextProductListSelector);
-        nextProductListWebElement.click();
-        // check
-        //webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(footerSelector));
+    public void clicNextProductListLink() {
 
+        boolean breakIt = true;
+        while (true) {
+            breakIt = true;
+            try {
+//************************** start ***********************
+
+                By nextProductListSelector = By.cssSelector("a[rel='next']");
+                WebDriverWait webDriverWait = new WebDriverWait(webDriver, 30);
+                webDriverWait.until(ExpectedConditions.elementToBeClickable(nextProductListSelector));
+                WebElement nextProductListWebElement = webDriver.findElement(nextProductListSelector);
+                nextProductListWebElement.click();
+//************************** end ***********************
+
+            } catch (Exception e) {
+                if (e.getMessage().contains("element is not attached")) {
+                    breakIt = false;
+                }
+            }
+            if (breakIt) {
+                break;
+            }
+
+        }
+    }
+
+    // wait adding new product 5 sec
+    public void threadSleep(int waitTimeMillisec){
+        try {
+            Thread.sleep(waitTimeMillisec);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

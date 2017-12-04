@@ -1,12 +1,14 @@
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 
 public class CreateProductTest {
-    private WebDriver webDriver;
+    private WebDriver driver;
+    private EventFiringWebDriver webDriver;
     private LoginPage loginPage;
     private ProductPage productPage;
     private ProductData productData;
@@ -27,7 +29,10 @@ public class CreateProductTest {
     @BeforeClass
     @Parameters ("selenium.browser")
     public void beforeClass (@Optional("chrome") String browser){
-        webDriver = BaseScript.getDriver(browser);
+        driver = BaseScript.getDriver(browser);
+        webDriver = new EventFiringWebDriver(driver);
+        webDriver.register(new EventHandler());
+
 
         webDriver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
@@ -71,7 +76,7 @@ public class CreateProductTest {
         productPage.saveNewProduct();
         productPage.clickPopUpAfterSaveAndActivate();
         // wait adding new product 5 sec
-        threadSleep(5000);
+        threadSleep(10000);
     }
     @Test (priority = 20)
     public void createOpenPrestashopClickAllProduct() {
@@ -88,7 +93,7 @@ public class CreateProductTest {
     }
     @Test (priority = 40)
     public void clickFoundProductPrestashop() {
-        prestashopPage.clickNewPoduct(foundNewProductOnFirstPageWebElement);
+        prestashopPage.openCreatedPoductPage(foundNewProductOnFirstPageWebElement);
     }
 
     @Test (priority = 50)

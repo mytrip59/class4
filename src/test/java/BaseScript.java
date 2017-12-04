@@ -43,7 +43,7 @@ public class BaseScript {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("headless");
                 chromeOptions.addArguments("window-size=1000x500");
-                return new ChromeDriver();
+                return new ChromeDriver(chromeOptions);
             case "chrome":
             default:
                 System.setProperty(
