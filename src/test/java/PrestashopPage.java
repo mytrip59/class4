@@ -43,7 +43,7 @@ public class PrestashopPage {
     // if found successfully->return found web element
     public WebElement foundNewProductInCatalog(String createdProductEtalon) {
         while (true) {
-            threadSleep(5000);
+            // threadSleep(5000);
             List<WebElement> listAllProducts;
             WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
             webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(footerSelector));

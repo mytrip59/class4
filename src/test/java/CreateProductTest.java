@@ -75,7 +75,7 @@ public class CreateProductTest {
         productPage.clickPopUpAfterSaveAndActivate();
         productPage.saveNewProduct();
         productPage.clickPopUpAfterSaveAndActivate();
-        // wait adding new product 5 sec
+        // wait adding a new product to the Site Catalog from Admin panel 10 sec
         threadSleep(10000);
     }
     @Test (priority = 20)
